@@ -7,6 +7,8 @@ import {LogOut} from "lucide-react";
 import Link from "next/link";
 
 export const NavbarRoutes = () => {
+    // Adiciona proteção para criação de cursos
+    // const { userId } = useAuth();
     const PATHNAME = usePathname();
     const IS_TEACHER_PAGE = PATHNAME?.startsWith("/teacher");
     const IS_VIDEO_PLAYER_PAGE = PATHNAME?.includes("/chapter");

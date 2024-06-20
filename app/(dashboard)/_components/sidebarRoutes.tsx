@@ -2,17 +2,17 @@
 
 import {SidebarItem} from "@/app/(dashboard)/_components/sidebarItem";
 import {BarChart, Compass, Layout, List} from "lucide-react";
-import {usePathname, useRouter} from "next/navigation";
+import {usePathname} from "next/navigation";
 
 const GUEST_ROUTES = [
     {
         icon: Layout,
-        label: "Dashboard",
+        label: "Painel de Controle",
         href: "/",
     },
     {
         icon: Compass,
-        label: "Browse",
+        label: "Pesquisar",
         href: "/search",
     }
 ]
@@ -20,12 +20,12 @@ const GUEST_ROUTES = [
 const TEACHER_ROUTES = [
     {
         icon: List,
-        label: "Courses",
+        label: "Cursos",
         href: "/teacher/courses",
     },
     {
         icon: BarChart,
-        label: "Analytics",
+        label: "Análise",
         href: "/teacher/analytics",
     }
 ]
