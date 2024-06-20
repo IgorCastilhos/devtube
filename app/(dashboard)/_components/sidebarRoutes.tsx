@@ -1,9 +1,10 @@
 "use client";
 
 import {SidebarItem} from "@/app/(dashboard)/_components/sidebarItem";
-import {Compass, Layout} from "lucide-react";
+import {BarChart, Compass, Layout, List} from "lucide-react";
+import {usePathname, useRouter} from "next/navigation";
 
-const GUESTROUTES = [
+const GUEST_ROUTES = [
     {
         icon: Layout,
         label: "Dashboard",
@@ -16,11 +17,28 @@ const GUESTROUTES = [
     }
 ]
 
+const TEACHER_ROUTES = [
+    {
+        icon: List,
+        label: "Courses",
+        href: "/teacher/courses",
+    },
+    {
+        icon: BarChart,
+        label: "Analytics",
+        href: "/teacher/analytics",
+    }
+]
+
 export const SidebarRoutes = () => {
+    const PATHNAME = usePathname();
+    const IS_TEACHER_PAGE = PATHNAME?.includes("/teacher");
+    const ROUTES = IS_TEACHER_PAGE ? TEACHER_ROUTES : GUEST_ROUTES;
+
     return (
         <div
             className="flex flex-col w-full text-white">
-            {GUESTROUTES.map((route) => (
+            {ROUTES.map((route) => (
                 <SidebarItem
                     key={route.href}
                     icon={route.icon}

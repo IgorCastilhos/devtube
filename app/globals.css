@@ -8,8 +8,16 @@
     height: 100%;
   }
 
+.teacher_button {
+  @apply bg-blue-500 text-white font-bold py-2 px-2 rounded;
+}
+
+.logout_button {
+  @apply bg-red-500 text-white font-bold py-2 px-2 rounded;
+}
+
 .bg-modern-gray {
-  background-color: #131316; /* A modern, stylish gray */
+  background-color: #131316;
 }
 
 
