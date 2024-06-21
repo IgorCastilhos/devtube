@@ -33,6 +33,10 @@ const CreatePage = () => {
         try {
             const response = await axios.post("/api/courses", values);
             ROUTER.push(`/teacher/courses/${response.data.id}`);
+            toast({
+                variant: "success",
+                title: "Curso criado com sucesso!",
+            })
         } catch (error) {
             toast({
                 variant: "destructive",
