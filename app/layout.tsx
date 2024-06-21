@@ -1,8 +1,9 @@
-import {ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
+import {ClerkProvider} from "@clerk/nextjs";
 import type {Metadata} from "next";
 import {Inter} from "next/font/google";
 import "./globals.css";
 import React from "react";
+import {Toaster} from "@/components/ui/toaster";
 
 const INTER = Inter({subsets: ["latin"]});
 
@@ -20,6 +21,7 @@ export default function RootLayout({children}: Readonly<{
         <ClerkProvider>
             <html lang="pt-BR">
             <body className={INTER.className}>
+            <Toaster />
             {children}
             </body>
             </html>
