@@ -3,6 +3,7 @@ import {auth} from "@clerk/nextjs/server";
 import {redirect} from "next/navigation";
 import {IconBadge} from "@/components/icon-badge";
 import {LayoutDashboard} from "lucide-react";
+import {TitleForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/title-form";
 
 const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
     const {userId} = auth();
@@ -11,7 +12,7 @@ const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
     const course = await prisma.course.findUnique({where: {id: params.courseId}});
     if (!course) return redirect("/");
 
-    const requiredFiels = [
+    const requiredFields = [
         course.title,
         course.description,
         course.imageUrl,
@@ -19,9 +20,9 @@ const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
         course.categoryId
     ];
     // Gets the number of all the required fields
-    const totalFields = requiredFiels.length;
+    const totalFields = requiredFields.length;
     // Gets the number of all the completed fields (which don't equal to false)
-    const completedFields = requiredFiels.filter(Boolean).length;
+    const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
 
     return (
@@ -43,10 +44,12 @@ const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
                         <h2 className="text-xl">
                             Customize o seu curso
                         </h2>
-
                     </div>
+                    <TitleForm
+                        initialData={course}
+                        courseId={course.id}
+                    />
                 </div>
-
             </div>
         </div>
     );
