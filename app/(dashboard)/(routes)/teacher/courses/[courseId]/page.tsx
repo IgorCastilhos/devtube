@@ -2,9 +2,11 @@ import prisma from "@/lib/db";
 import {auth} from "@clerk/nextjs/server";
 import {redirect} from "next/navigation";
 import {IconBadge} from "@/components/icon-badge";
-import {LayoutDashboard} from "lucide-react";
+import {CircleDollarSign, LayoutDashboard, ListChecks} from "lucide-react";
 import {TitleForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/title-form";
 import {DescriptionForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/description-form";
+import {ImageForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/image-form";
+import {PriceForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/price-form";
 
 const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
     const {userId} = auth();
@@ -12,6 +14,12 @@ const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
 
     const course = await prisma.course.findUnique({where: {id: params.courseId}});
     if (!course) return redirect("/");
+
+    // const categories = await prisma.category.findMany({
+    //     orderBy: {
+    //         name: "asc",
+    //     },
+    // })
 
     const requiredFields = [
         course.title,
@@ -51,10 +59,43 @@ const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
                         courseId={course.id}
                     />
                     <DescriptionForm
-                        // @ts-ignore
                         initialData={course}
                         courseId={course.id}
                     />
+                    <ImageForm
+                        initialData={course}
+                        courseId={course.id}
+                    />
+                    {/*<CategoryForm*/}
+                    {/*    initialData={course}*/}
+                    {/*    courseId={course.id}*/}
+                    {/*    options={categories.map((category) => ({*/}
+                    {/*        label: category.name,*/}
+                    {/*        value: category.id,*/}
+                    {/*    }))}*/}
+                    {/*/>*/}
+                </div>
+                <div className="space-y-6">
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                            <IconBadge icon={ListChecks}/>
+                            <h2 className="text-xl">
+                                Informações do Curso
+                            </h2>
+                        </div>
+                        <div>
+                            TODO capítulos
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                            <IconBadge icon={CircleDollarSign}/>
+                            <h2 className="text-xl">
+                                Venda seu curso
+                            </h2>
+                        </div>
+                        <PriceForm initialData={course} courseId={course.id}/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,4 +103,3 @@ const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
 }
 
 export default CourseIdPage;
-// Todo 02:52:25

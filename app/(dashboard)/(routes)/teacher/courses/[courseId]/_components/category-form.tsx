@@ -1,43 +1,50 @@
 "use client";
 
-import {z} from "zod";
-import {useForm} from "react-hook-form";
+import * as z from "zod";
+import axios from "axios";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Button} from "@/components/ui/button";
+import {useForm} from "react-hook-form";
 import {Pencil} from "lucide-react";
 import {useState} from "react";
-import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form";
 import {toast} from "@/components/ui/use-toast";
-import axios from "axios";
 import {useRouter} from "next/navigation";
-import {cn} from "@/lib/utils";
-import {Textarea} from "@/components/ui/textarea";
 import {Course} from "@prisma/client";
+import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form";
+import {Button} from "@/components/ui/button";
+import {cn} from "@/lib/utils";
+import {Combobox} from "@/components/ui/combobox";
 
-interface DescriptionFormProps {
+interface CategoryFormProps {
     initialData: Course
     courseId: string;
+    options: {
+        label: string;
+        value: string;
+    }[];
 }
 
 const formSchema = z.object({
-    description: z.string().min(1, {
-        message: "Descrição é obrigatória"
-    })
-})
+    categoryId: z.string().min(1),
+});
 
-export const DescriptionForm = ({
-                                    initialData,
-                                    courseId
-                                }: DescriptionFormProps) => {
+export const CategoryForm = ({
+                                 initialData,
+                                 courseId,
+                                 options
+                             }: CategoryFormProps) => {
+
     const [isEditing, setIsEditing] = useState(false);
+
     const toggleEdit = () => setIsEditing((current) => !current);
+
     const router = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            description: initialData?.description || ""
-        }
-    })
+            categoryId: initialData?.categoryId || ""
+        },
+    });
 
     const {isSubmitting, isValid} = form.formState;
 
@@ -46,7 +53,7 @@ export const DescriptionForm = ({
             await axios.patch(`/api/courses/${courseId}`, values);
             toast({
                 variant: "success",
-                title: "Curso atualizado com sucesso!",
+                title: "Categoria atualizada",
             })
             toggleEdit();
             router.refresh();
@@ -59,17 +66,20 @@ export const DescriptionForm = ({
         }
     }
 
+    // Check if the course already has an option
+    const selectedOption = options.find(option => option.value === initialData.categoryId);
+
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
-                Descrição do Curso
-                <Button onClick={toggleEdit} variant={"ghost"}>
+                Categoria do curso
+                <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
                         <>Cancelar</>
                     ) : (
                         <>
                             <Pencil className="h-4 w-4 mr-2"/>
-                            Editar descrição
+                            Editar categoria
                         </>
                     )}
                 </Button>
@@ -77,9 +87,9 @@ export const DescriptionForm = ({
             {!isEditing && (
                 <p className={cn(
                     "text-sm mt-2",
-                    !initialData.description && "text-slate-500 italic"
+                    !initialData.categoryId && "text-slate-500 italic"
                 )}>
-                    {initialData.description || "Sem descrição"}
+                    {selectedOption?.label || "Sem categoria"}
                 </p>
             )}
             {isEditing && (
@@ -90,15 +100,11 @@ export const DescriptionForm = ({
                     >
                         <FormField
                             control={form.control}
-                            name="description"
+                            name="categoryId"
                             render={({field}) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Textarea
-                                            disabled={isSubmitting}
-                                            placeholder="Este curso é sobre..."
-                                            {...field}
-                                        />
+                                        {/*<Combobox options={...options} onChange={...field}/>*/}
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>

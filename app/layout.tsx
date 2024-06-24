@@ -21,7 +21,7 @@ export default function RootLayout({children}: Readonly<{
         <ClerkProvider>
             <html lang="pt-BR">
             <body className={INTER.className}>
-            <Toaster />
+            <Toaster/>
             {children}
             </body>
             </html>
