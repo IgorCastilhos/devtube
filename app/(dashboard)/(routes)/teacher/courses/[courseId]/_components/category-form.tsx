@@ -13,25 +13,26 @@ import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import {Combobox} from "@/components/ui/combobox";
+import prisma from "@/lib/db";
 
 interface CategoryFormProps {
     initialData: Course
     courseId: string;
-    options: {
-        label: string;
-        value: string;
-    }[];
+    options: { label: string; value: string; }[];
 }
+
+const getCategories = async () => {
+    const categories = await prisma.category.findMany({
+        orderBy: { name: "asc" },
+    });
+    return categories;
+};
 
 const formSchema = z.object({
     categoryId: z.string().min(1),
 });
 
-export const CategoryForm = ({
-                                 initialData,
-                                 courseId,
-                                 options
-                             }: CategoryFormProps) => {
+export const CategoryForm = ({initialData, courseId, options}: CategoryFormProps) => {
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -69,6 +70,7 @@ export const CategoryForm = ({
     // Check if the course already has an option
     const selectedOption = options.find(option => option.value === initialData.categoryId);
 
+
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
@@ -104,7 +106,11 @@ export const CategoryForm = ({
                             render={({field}) => (
                                 <FormItem>
                                     <FormControl>
-                                        {/*<Combobox options={...options} onChange={...field}/>*/}
+                                        {/*<Combobox options={getCategories().map((category) => ({*/}
+                                        {/*    label: category.name,*/}
+                                        {/*    value: category.id,*/}
+                                        {/*}))}*/}
+                                        {/*          {...field}/>*/}
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>

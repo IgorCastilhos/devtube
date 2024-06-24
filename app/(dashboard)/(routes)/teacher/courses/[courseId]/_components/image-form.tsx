@@ -37,7 +37,7 @@ export const ImageForm = ({
             await axios.patch(`/api/courses/${courseId}`, values);
             toast({
                 variant: "success",
-                title: "Curso atualizado com sucesso!",
+                title: "Imagem atualizada com sucesso!",
             })
             toggleEdit();
             router.refresh();

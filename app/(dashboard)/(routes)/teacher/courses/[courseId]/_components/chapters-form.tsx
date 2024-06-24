@@ -4,38 +4,39 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button";
-import {Pencil} from "lucide-react";
+import {PlusCircle} from "lucide-react";
 import {useState} from "react";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form";
 import {toast} from "@/components/ui/use-toast";
 import axios from "axios";
 import {useRouter} from "next/navigation";
 import {cn} from "@/lib/utils";
-import {Textarea} from "@/components/ui/textarea";
-import {Course} from "@prisma/client";
+import {Chapter, Course} from "@prisma/client";
+import {Input} from "@/components/ui/input";
 
-interface DescriptionFormProps {
-    initialData: Course
+interface ChaptersFormProps {
+    initialData: Course & { chapters: Chapter[] };
     courseId: string;
 }
 
 const formSchema = z.object({
-    description: z.string().min(1, {
-        message: "Descrição é obrigatória"
-    })
+    title: z.string().min(1)
 })
 
-export const DescriptionForm = ({
-                                    initialData,
-                                    courseId
-                                }: DescriptionFormProps) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const toggleEdit = () => setIsEditing((current) => !current);
+export const ChaptersForm = ({initialData, courseId}: ChaptersFormProps) => {
+    const [isCreating, setIsCreating] = useState(false);
+    const [isUpdating, setisUpdating] = useState(false);
+
+    const toggleCreating = () => {
+        setIsCreating((current) => !current)
+    };
+
     const router = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            description: initialData?.description || ""
+            title: "",
         }
     })
 
@@ -43,12 +44,12 @@ export const DescriptionForm = ({
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await axios.patch(`/api/courses/${courseId}`, values);
+            await axios.post(`/api/courses/${courseId}/chapters`, values);
             toast({
                 variant: "success",
-                title: "Descrição atualizada com sucesso!",
+                title: "Capítulo criado com sucesso!",
             })
-            toggleEdit();
+            toggleCreating();
             router.refresh();
         } catch (error) {
             toast({
@@ -62,27 +63,19 @@ export const DescriptionForm = ({
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
-                Descrição do Curso
-                <Button onClick={toggleEdit} variant={"ghost"}>
-                    {isEditing ? (
+                Capítulos do Curso
+                <Button onClick={toggleCreating} variant={"ghost"}>
+                    {isCreating ? (
                         <>Cancelar</>
                     ) : (
                         <>
-                            <Pencil className="h-4 w-4 mr-2"/>
-                            Editar descrição
+                            <PlusCircle className="h-4 w-4 mr-2"/>
+                            Adicionar um capítulo
                         </>
                     )}
                 </Button>
             </div>
-            {!isEditing && (
-                <p className={cn(
-                    "text-sm mt-2",
-                    !initialData.description && "text-slate-500 italic"
-                )}>
-                    {initialData.description || "Sem descrição"}
-                </p>
-            )}
-            {isEditing && (
+            {isCreating && (
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
@@ -90,13 +83,13 @@ export const DescriptionForm = ({
                     >
                         <FormField
                             control={form.control}
-                            name="description"
+                            name="title"
                             render={({field}) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Textarea
+                                        <Input
                                             disabled={isSubmitting}
-                                            placeholder="Este curso é sobre..."
+                                            placeholder="Introdução ao curso"
                                             {...field}
                                         />
                                     </FormControl>
@@ -104,17 +97,28 @@ export const DescriptionForm = ({
                                 </FormItem>
                             )}
                         />
-                        <div className="flex items-center gap-x-2">
-                            <Button
-                                disabled={!isValid || isSubmitting}
-                                type="submit"
-                            >
-                                Salvar
-                            </Button>
-                        </div>
+                        <Button
+                            disabled={!isValid || isSubmitting}
+                            type="submit"
+                        >
+                            Criar
+                        </Button>
                     </form>
                 </Form>
+            )}
+            {!isCreating && (
+                <div className={cn("text-sm mt-2", !initialData.chapters.length && "text-slate-500 italic")}>
+                    {!initialData.chapters.length && "Sem capítulos"}
+                    {/*    Todo Adicionar lista de capitulos*/}
+                </div>
+            )}
+            {!isCreating && (
+                <p className="text-xs text-muted-foreground mt-4">
+                    Segure e arraste os capítulos para reordená-los.
+                </p>
             )}
         </div>
     )
 }
+
+// Todo 4:23:11

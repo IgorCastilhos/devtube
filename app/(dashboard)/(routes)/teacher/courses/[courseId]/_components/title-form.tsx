@@ -44,7 +44,7 @@ export const TitleForm = ({
             await axios.patch(`/api/courses/${courseId}`, values);
             toast({
                 variant: "success",
-                title: "Curso atualizado com sucesso!",
+                title: "Título atualizado com sucesso!",
             })
             toggleEdit();
             router.refresh();
