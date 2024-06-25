@@ -4,6 +4,7 @@ import {Inter} from "next/font/google";
 import "./globals.css";
 import React from "react";
 import {Toaster} from "@/components/ui/toaster";
+import {ConfettiProvider} from "@/components/providers/confetti-provider";
 
 const INTER = Inter({subsets: ["latin"]});
 
@@ -21,6 +22,7 @@ export default function RootLayout({children}: Readonly<{
         <ClerkProvider>
             <html lang="pt-BR">
             <body className={INTER.className}>
+            <ConfettiProvider/>
             <Toaster/>
             {children}
             </body>
