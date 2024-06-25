@@ -13,6 +13,7 @@ import {
 import {
     ChapterAccessForm
 } from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-access-form";
+import {ChapterVideoForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-video-form";
 
 const ChapterIdPage = async ({
                                  params
@@ -95,11 +96,11 @@ const ChapterIdPage = async ({
                             <IconBadge icon={Video}/>
                             <h2 className="text-xl font-medium">Adicionar video</h2>
                         </div>
-                        {/*<ChapterVideoForm*/}
-                        {/*    initialData={chapter}*/}
-                        {/*    courseId={params.courseId}*/}
-                        {/*    chapterId={params.chapterId}*/}
-                        {/*/>*/}
+                        <ChapterVideoForm
+                            initialData={chapter}
+                            courseId={params.courseId}
+                            chapterId={params.chapterId}
+                        />
                     </div>
                 </div>
             </div>
