@@ -13,7 +13,13 @@ import {
 import {
     ChapterAccessForm
 } from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-access-form";
-import {ChapterVideoForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-video-form";
+import {
+    ChapterVideoForm
+} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-video-form";
+import {Banner} from "@/components/banner";
+import {
+    ChapterActions
+} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/chapters/[chapterId]/_components/chapter-actions";
 
 const ChapterIdPage = async ({
                                  params
@@ -41,8 +47,16 @@ const ChapterIdPage = async ({
 
     const completionText = `(${completedFields}/${totalFields})`;
 
+    const isComplete = requiredFields.every(Boolean);
+
     return (
         <>
+            {!chapter.isPublished && (
+                <Banner
+                    variant={"warning"}
+                    label={"Este capítulo ainda não foi publicado e não está disponível para os alunos."}
+                />
+            )}
             <div className="p-6">
                 <div className="flex items-center justify-between">
                     <div className="w-full">
@@ -59,9 +73,15 @@ const ChapterIdPage = async ({
                             </div>
                         </div>
                         <span className="text-sm text-slate-700 dark:text-slate-300 ">
-                Complete todos os campos {completionText}
-            </span>
+                            Complete todos os campos {completionText}
+                        </span>
                     </div>
+                    <ChapterActions
+                        disabled={!isComplete}
+                        courseId={params.courseId}
+                        chapterId={params.chapterId}
+                        isPublished={chapter.isPublished}
+                    />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
                     <div className="space-y-4">
@@ -109,3 +129,4 @@ const ChapterIdPage = async ({
 }
 
 export default ChapterIdPage;
+// Todo 05:52:50
