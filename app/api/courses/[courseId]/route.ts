@@ -63,7 +63,8 @@ export async function PATCH(
         const values = await req.json();
 
 
-        if (!userId) {
+        if (!userId)
+        {
             return new NextResponse("Unauthorized", {status: 401});
         }
 

@@ -1,15 +1,16 @@
 "use client";
 
-import {UserButton} from "@clerk/nextjs";
+import {useAuth, UserButton} from "@clerk/nextjs";
 import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
 import {LogOut} from "lucide-react";
 import Link from "next/link";
 import {SearchInput} from "@/components/search-input";
+import {isTeacher} from "@/lib/teacher";
 
 export const NavbarRoutes = () => {
     // Adiciona proteção para criação de cursos
-    // const { userId } = useAuth();
+    const {userId} = useAuth();
     const pathname = usePathname();
     const isTeacherPage = pathname?.startsWith("/teacher");
     const isCoursePage = pathname?.includes("/courses");
@@ -30,13 +31,13 @@ export const NavbarRoutes = () => {
                             Sair
                         </Button>
                     </Link>
-                ) : (
+                ) : isTeacher(userId) ? (
                     <Link href={"/teacher/courses"}>
                         <Button size={"sm"} variant={"secondary"} className={"teacher_button hover:bg-sky-700 mr-6"}>
                             Modo Professor
                         </Button>
                     </Link>
-                )}
+                ) : null}
                 <UserButton/>
             </div>
         </>

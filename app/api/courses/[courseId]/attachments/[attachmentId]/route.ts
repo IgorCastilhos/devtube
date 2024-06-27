@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
 import {auth} from "@clerk/nextjs/server";
 import prisma from "@/lib/db";
+import {isTeacher} from "@/lib/teacher";
 
 export async function DELETE(
     req: Request,
@@ -9,7 +10,7 @@ export async function DELETE(
     try {
         const {userId} = auth();
 
-        if (!userId) return new NextResponse("Unauthorized", {status: 401});
+        if (!userId || !isTeacher(userId)) return new NextResponse("Unauthorized", {status: 401});
 
         const courseOwner = await prisma.course.findFirst({
             where: {
