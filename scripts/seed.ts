@@ -5,12 +5,17 @@ async function main() {
     try {
         await database.category.createMany({
             data: [
-                {name: "Ciência da computação"},
-                {name: "Música"},
-                {name: "Gastronomia"},
-                {name: "Arte"},
-                {name: "Cinema"},
-                {name: "Futebol"},
+                {name: "Estrutura de Dados"},
+                {name: "Algoritmos"},
+                {name: "HTML"},
+                {name: "CSS"},
+                {name: "JavaScript"},
+                {name: "React"},
+                {name: "PostgreSQL"},
+                {name: "Go"},
+                {name: "MySQL"},
+                {name: "Docker"},
+                {name: "Postman"},
             ]
         });
 
