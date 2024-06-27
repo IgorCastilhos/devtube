@@ -10,20 +10,20 @@ import {SearchInput} from "@/components/search-input";
 export const NavbarRoutes = () => {
     // Adiciona proteção para criação de cursos
     // const { userId } = useAuth();
-    const PATHNAME = usePathname();
-    const IS_TEACHER_PAGE = PATHNAME?.startsWith("/teacher");
-    const IS_VIDEO_PLAYER_PAGE = PATHNAME?.includes("/chapter");
-    const IS_SEARCH_PAGE = PATHNAME === "/search";
+    const pathname = usePathname();
+    const isTeacherPage = pathname?.startsWith("/teacher");
+    const isCoursePage = pathname?.includes("/courses");
+    const isSearchPage = pathname === "/search";
 
     return (
         <>
-            {IS_SEARCH_PAGE && (
+            {isSearchPage && (
                 <div className={"hidden md:block"}>
                     <SearchInput/>
                 </div>
             )}
             <div className="flex gap-x-2 ml-auto">
-                {IS_TEACHER_PAGE || IS_VIDEO_PLAYER_PAGE ? (
+                {isTeacherPage || isCoursePage ? (
                     <Link href={"/"}>
                         <Button size={"sm"} variant={"secondary"} className={"logout_button hover:bg-red-800 mr-6"}>
                             <LogOut className="h-4 w-4 mr-2"/>
