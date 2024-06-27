@@ -12,34 +12,27 @@ import {Course} from "@prisma/client";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
-import {Combobox} from "@/components/ui/combobox";
-import prisma from "@/lib/db";
+import {SelectCategory} from "@/components/ui/select-custom";
 
 interface CategoryFormProps {
     initialData: Course
     courseId: string;
-    options: { label: string; value: string; }[];
+    options: {
+        label: string;
+        value: string;
+    }[];
 }
-
-const getCategories = async () => {
-    const categories = await prisma.category.findMany({
-        orderBy: { name: "asc" },
-    });
-    return categories;
-};
 
 const formSchema = z.object({
     categoryId: z.string().min(1),
 });
 
 export const CategoryForm = ({initialData, courseId, options}: CategoryFormProps) => {
-
     const [isEditing, setIsEditing] = useState(false);
 
     const toggleEdit = () => setIsEditing((current) => !current);
 
     const router = useRouter();
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -48,7 +41,6 @@ export const CategoryForm = ({initialData, courseId, options}: CategoryFormProps
     });
 
     const {isSubmitting, isValid} = form.formState;
-
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.patch(`/api/courses/${courseId}`, values);
@@ -68,8 +60,7 @@ export const CategoryForm = ({initialData, courseId, options}: CategoryFormProps
     }
 
     // Check if the course already has an option
-    const selectedOption = options.find(option => option.value === initialData.categoryId);
-
+    const selectedOption = options.find((option) => option.value === initialData.categoryId);
 
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -106,11 +97,10 @@ export const CategoryForm = ({initialData, courseId, options}: CategoryFormProps
                             render={({field}) => (
                                 <FormItem>
                                     <FormControl>
-                                        {/*<Combobox options={getCategories().map((category) => ({*/}
-                                        {/*    label: category.name,*/}
-                                        {/*    value: category.id,*/}
-                                        {/*}))}*/}
-                                        {/*          {...field}/>*/}
+                                        <SelectCategory
+                                            options={options}
+                                            {...field}
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>

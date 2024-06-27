@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import {Trash} from "lucide-react";
-import {ConfirmModal} from "@/components/models/confirm-modal";
+import {ConfirmModal} from "@/components/modals/confirm-modal";
 import {useState} from "react";
 import {toast} from "@/components/ui/use-toast";
 import axios from "axios";
@@ -25,7 +25,7 @@ export const Actions = ({disabled, courseId, isPublished}: ActionsProps) => {
             setIsLoading(true);
 
             if (isPublished) {
-                await axios.patch(`/api/courses/${courseId}/unpublish`, {isPublished: false});
+                await axios.patch(`/api/courses/${courseId}/unpublish`);
                 toast(
                     {
                         variant: "success",
@@ -33,7 +33,7 @@ export const Actions = ({disabled, courseId, isPublished}: ActionsProps) => {
                     }
                 )
             } else {
-                await axios.patch(`/api/courses/${courseId}/publish`, {isPublished: true});
+                await axios.patch(`/api/courses/${courseId}/publish`);
                 toast(
                     {
                         variant: "success",
@@ -47,7 +47,7 @@ export const Actions = ({disabled, courseId, isPublished}: ActionsProps) => {
             toast(
                 {
                     variant: "destructive",
-                    title: "Uh oh! Algo deu errado.",
+                    title: "Uh oh! Algo deu errado."
                 }
             )
         } finally {

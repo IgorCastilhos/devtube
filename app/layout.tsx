@@ -21,7 +21,7 @@ export default function RootLayout({children}: Readonly<{
     return (
         <ClerkProvider>
             <html lang="pt-BR">
-            <body className={INTER.className}>
+            <body className={`${INTER.className} dark:bg-modern-gray`}>
             <ConfettiProvider/>
             <Toaster/>
             {children}

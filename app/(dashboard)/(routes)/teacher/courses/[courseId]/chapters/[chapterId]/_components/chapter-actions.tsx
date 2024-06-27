@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import {Trash} from "lucide-react";
-import {ConfirmModal} from "@/components/models/confirm-modal";
+import {ConfirmModal} from "@/components/modals/confirm-modal";
 import {useState} from "react";
 import {toast} from "@/components/ui/use-toast";
 import axios from "axios";

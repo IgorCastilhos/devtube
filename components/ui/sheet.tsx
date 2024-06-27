@@ -66,8 +66,8 @@ const SheetContent = React.forwardRef<
     >
       {children}
       <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <X className="w-5 w-5 text-white" />
-        <span className="sr-only">Close</span>
+        <X className="w-5 h-5 text-black mr-2 mt-2 dark:text-white" />
+        <span className="sr-only">Fechar</span>
       </SheetPrimitive.Close>
     </SheetPrimitive.Content>
   </SheetPortal>

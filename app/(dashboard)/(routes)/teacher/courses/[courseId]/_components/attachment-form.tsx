@@ -19,17 +19,14 @@ const formSchema = z.object({
     url: z.string().min(1)
 })
 
-export const AttachmentForm = ({
-                                   initialData,
-                                   courseId
-                               }: AttachmentFormProps) => {
+export const AttachmentForm = ({initialData, courseId}: AttachmentFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
+
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const toggleEdit = () => setIsEditing((current) => !current);
 
     const router = useRouter();
-
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.post(`/api/courses/${courseId}/attachments`, values);
@@ -104,7 +101,8 @@ export const AttachmentForm = ({
                                         </div>
                                     )}
                                     {deletingId !== attachment.id && (
-                                        <button className="ml-auto hover:opacity-75 transition" onClick={() => onDelete(attachment.id)}>
+                                        <button className="ml-auto hover:opacity-75 transition"
+                                                onClick={() => onDelete(attachment.id)}>
                                             <X className="h-4 w-4"/>
                                         </button>
                                     )}

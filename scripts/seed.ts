@@ -1,8 +1,9 @@
-import prisma from "../lib/db";
+const {PrismaClient} = require('@prisma/client')
+const database = new PrismaClient();
 
 async function main() {
     try {
-        await prisma.category.createMany({
+        await database.category.createMany({
             data: [
                 {name: "Ciência da computação"},
                 {name: "Música"},
@@ -12,11 +13,12 @@ async function main() {
                 {name: "Futebol"},
             ]
         });
+
         console.log("Sucesso")
     } catch (error) {
         console.log("Erro ao fazer o seed das categorias do banco de dados", error)
     } finally {
-        await prisma.$disconnect()
+        await database.$disconnect()
     }
 }
 

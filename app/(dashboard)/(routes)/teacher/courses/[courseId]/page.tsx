@@ -1,4 +1,3 @@
-import prisma from "@/lib/db";
 import {auth} from "@clerk/nextjs/server";
 import {redirect} from "next/navigation";
 import {IconBadge} from "@/components/icon-badge";
@@ -11,26 +10,34 @@ import {AttachmentForm} from "@/app/(dashboard)/(routes)/teacher/courses/[course
 import {ChaptersForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/chapters-form";
 import {Banner} from "@/components/banner";
 import {Actions} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/actions";
+import prisma from "@/lib/db";
+import {CategoryForm} from "@/app/(dashboard)/(routes)/teacher/courses/[courseId]/_components/category-form";
 
 const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
     const {userId} = auth();
-    if (!userId) return redirect("/");
+    if (!userId) {
+        return redirect("/");
+    }
 
     const course = await prisma.course.findUnique({
         where: {id: params.courseId, userId},
         include: {chapters: {orderBy: {position: "asc"}}, attachments: {orderBy: {createdAt: "desc"}}}
     });
-    if (!course) return redirect("/");
 
-    // const categories = await prisma.category.findMany({
-    //     orderBy: {name: "asc"},
-    // })
+    const categories = await prisma.category.findMany({
+        orderBy: {name: "asc"},
+    })
+
+    if (!course) {
+        return redirect("/");
+    }
 
     const requiredFields = [
         course.title,
         course.description,
         course.imageUrl,
         course.price,
+        course.categoryId,
         course.chapters.some(chapter => chapter.isPublished)
     ];
     // Gets the number of all the required fields
@@ -70,14 +77,14 @@ const CourseIdPage = async ({params}: { params: { courseId: string } }) => {
                         <TitleForm initialData={course} courseId={course.id}/>
                         <DescriptionForm initialData={course} courseId={course.id}/>
                         <ImageForm initialData={course} courseId={course.id}/>
-                        {/*<CategoryForm*/}
-                        {/*    initialData={course}*/}
-                        {/*    courseId={course.id}*/}
-                        {/*    options={categories.map((category) => ({*/}
-                        {/*        label: category.name,*/}
-                        {/*        value: category.id,*/}
-                        {/*    }))}*/}
-                        {/*/>*/}
+                        <CategoryForm
+                            initialData={course}
+                            courseId={course.id}
+                            options={categories.map((category) => ({
+                                label: category.name,
+                                value: category.id,
+                            }))}
+                        />
                     </div>
                     <div className="space-y-6">
                         <div>

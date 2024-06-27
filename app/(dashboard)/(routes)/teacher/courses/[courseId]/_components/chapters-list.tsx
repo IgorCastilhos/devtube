@@ -14,7 +14,6 @@ import {DragDropContext, Draggable, Droppable, DropResult} from "@hello-pangea/d
 import {cn} from "@/lib/utils";
 import {Grip, Pencil} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
-import {cons} from "effect/List";
 
 interface ChaptersListProps {
     items: Chapter[];
