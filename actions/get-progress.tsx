@@ -1,11 +1,11 @@
-import db from "@/lib/db";
+import prisma from "@/lib/db";
 
-export const GetProgress = async (
+export const getProgress = async (
     userId: string,
     courseId: string,
 ): Promise<number> => {
     try {
-        const publishedChapters = await db.chapter.findMany({
+        const publishedChapters = await prisma.chapter.findMany({
             where: {
                 courseId: courseId,
                 isPublished: true,
@@ -16,7 +16,8 @@ export const GetProgress = async (
         });
 
         const publishedChapterIds = publishedChapters.map(chapter => chapter.id);
-        const validCompletedChapters = await db.userProgress.count  ({
+
+        const validCompletedChapters = await prisma.userProgress.count({
             where: {
                 userId: userId,
                 chapterId: {
@@ -26,8 +27,7 @@ export const GetProgress = async (
             }
         });
 
-        const progressPercentage = (validCompletedChapters / publishedChapters.length) * 100;
-        return progressPercentage;
+        return (validCompletedChapters / publishedChapters.length) * 100;
     } catch (error) {
         console.log("[GET_PROGRESS]", error);
         return 0;
