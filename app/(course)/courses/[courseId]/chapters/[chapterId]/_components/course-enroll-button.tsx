@@ -32,7 +32,7 @@ export const CourseEnrollButton = ({price, courseId}: CourseEnrollButtonProps) =
     }
 
     return (
-        <Button className="w-full md:w-auto" size={"sm"} onClick={onClick} disabled={isLoading}>
+        <Button className="w-full md:w-auto bg-emerald-300 hover:bg-emerald-400 text-white" size={"sm"} onClick={onClick} disabled={isLoading}>
             Inscrever-se {formatPrice(price)}
         </Button>
     )
