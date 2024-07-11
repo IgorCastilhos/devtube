@@ -1,6 +1,6 @@
 import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 
-const isPublicRoute = createRouteMatcher(["/api/webhook", "/api/uploadthing", "https://devtube.live", "https://devtube.live/sign-in", "https://devtube.live/sign-up"]);
+const isPublicRoute = createRouteMatcher(["/api/webhook", "/api/uploadthing"]);
 
 export default clerkMiddleware((auth, request) => {
     if (!isPublicRoute(request)) {
